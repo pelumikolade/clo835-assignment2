@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: db
+  labels:
+    name: db
+spec:
+  containers:
+  - name: mysql
+    image: 645402193523.dkr.ecr.us-east-1.amazonaws.com/db-repo
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: mysql-pass
+          key: password
+    ports:
+    - name: mysql
+      containerPort: 3306
+      protocol: TCP
+    volumeMounts:
+    - name: db-storage
+      mountPath: /var/lib/mysql
+  volumes:
+  - name: db-storage
+    emptyDir: {}

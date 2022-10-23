@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app
+  labels:
+    name: app
+spec:
+  containers:
+  - name: app
+    image: 645402193523.dkr.ecr.us-east-1.amazonaws.com/app-repo
+    ports:
+      - containerPort: 8080
+        protocol: TCP
+    env:
+      - name: DBPWD
+        valueFrom:
+          secretKeyRef:
+            name: mysql-pass
+            key: password
+      - name: DBPORT
+        value: "3306"
+      - name: DBHOST
+        value: 10.244.0.5

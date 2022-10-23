@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: db-replica
+  labels:
+    app: mysql
+    tier: backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mysql
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: mysql
+        tier: backend
+    spec:
+      containers:
+      - name: mysql
+        image: 645402193523.dkr.ecr.us-east-1.amazonaws.com/db-repo
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pass
+              key: password
+        ports:
+        - name: mysql
+          containerPort: 3306
+          protocol: TCP
+        volumeMounts:
+        - name: db-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: db-storage
+        emptyDir: {}
+                                                                                                                                                                                                                                    36,14         Bot
